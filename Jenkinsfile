@@ -9,23 +9,23 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 dir('backend') {
-                    bat 'npm install'
+                    sh 'npm install'
                 }
             }
         }
 
         stage('Start Services') {
             steps {
-                bat "${DOCKER_COMPOSE} up -d mysql"
+                sh "${DOCKER_COMPOSE} up -d mysql"
                 // Wait for MySQL to be ready
-                bat 'ping 127.0.0.1 -n 10 > nul'
+                sh 'sleep 10'
             }
         }
 
         stage('Run Unit Tests') {
             steps {
                 dir('backend') {
-                    bat 'npm run test:unit'
+                    sh 'npm run test:unit'
                 }
             }
         }
@@ -33,14 +33,14 @@ pipeline {
         stage('Run Integration Tests') {
             steps {
                 dir('backend') {
-                    bat 'npm run test:integration'
+                    sh 'npm run test:integration'
                 }
             }
         }
 
         stage('Stop Services') {
             steps {
-                bat "${DOCKER_COMPOSE} down"
+                sh "${DOCKER_COMPOSE} down"
             }
         }
     }
@@ -48,10 +48,10 @@ pipeline {
     post {
         always {
             // Clean up
-            bat "${DOCKER_COMPOSE} down -v"
-
+            sh "${DOCKER_COMPOSE} down -v"
+            
             // Publish test results
             junit 'backend/junit.xml'
         }
     }
-}
+} 
