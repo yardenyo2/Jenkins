@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_COMPOSE = 'docker-compose'
         JWT_SECRET = 'test-secret-key'
+        JWT_EXPIRES_IN = '24h'
     }
 
     stages {
