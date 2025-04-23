@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test:unit": "jest tests/unit",
-    "test:integration": "jest tests/integration",
+    "test:unit": "jest tests/unit --reporters=default --reporters=jest-junit",
+    "test:integration": "jest tests/integration --reporters=default --reporters=jest-junit",
     "test": "npm run test:unit && npm run test:integration"
   },
   "dependencies": {
@@ -20,7 +20,17 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
     "nodemon": "^3.0.1",
     "supertest": "^6.3.3"
+  },
+  "jest-junit": {
+    "outputDirectory": ".",
+    "outputName": "junit.xml",
+    "ancestorSeparator": " › ",
+    "uniqueOutputName": "false",
+    "suiteNameTemplate": "{filepath}",
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}"
   }
 } 

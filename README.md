@@ -28,6 +28,7 @@ A modern full-stack boilerplate project with React, Express, MySQL, and Docker.
 │   │   └── integration/
 │   ├── .env
 │   ├── .env.test
+│   ├── Jenkinsfile
 │   └── package.json
 ├── frontend/
 │   ├── src/
@@ -38,7 +39,6 @@ A modern full-stack boilerplate project with React, Express, MySQL, and Docker.
 │   ├── package.json
 │   └── vite.config.js
 ├── docker-compose.yml
-├── Jenkinsfile
 └── README.md
 ```
 
@@ -49,6 +49,7 @@ A modern full-stack boilerplate project with React, Express, MySQL, and Docker.
 - Node.js (v18 or higher)
 - Docker and Docker Compose
 - MySQL (if running locally)
+- Jenkins (for CI/CD)
 
 ### Installation
 
@@ -112,6 +113,15 @@ npm run test:integration  # Run integration tests
 npm test             # Run all tests
 ```
 
+### CI/CD with Jenkins
+
+1. Create a new Jenkins pipeline job
+2. Set the pipeline definition to "Pipeline script from SCM"
+3. Select Git as the SCM
+4. Enter your repository URL
+5. Set the script path to `backend/Jenkinsfile`
+6. Save and run the pipeline
+
 ## Features
 
 - User authentication (register/login)
@@ -122,7 +132,7 @@ npm test             # Run all tests
 - Error handling middleware
 - Database connection pooling
 - Docker containerization
-- Jenkins CI/CD pipeline
+- Jenkins CI/CD pipeline with test reporting
 
 ## API Endpoints
 
