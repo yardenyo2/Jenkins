@@ -6,6 +6,14 @@ pipeline {
     }
 
     stages {
+        stage('Test Shell') {
+            steps {
+                sh 'echo "Testing shell command"'
+                sh 'pwd'
+                sh 'ls -la'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 dir('backend') {
