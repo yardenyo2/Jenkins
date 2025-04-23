@@ -6,60 +6,55 @@ pipeline {
     }
 
     stages {
-        stage('Test Shell') {
+        stage('Test Batch') {
             steps {
-                sh 'echo "Testing shell command"'
-                sh 'pwd'
-                sh 'ls -la'
+                bat 'echo "Starting the pipeline"'
+                bat 'dir'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                dir('backend') {
-                    sh 'npm install'
-                }
+                bat 'npm install'
             }
         }
 
         stage('Start Services') {
             steps {
-                sh "${DOCKER_COMPOSE} up -d mysql"
-                // Wait for MySQL to be ready
-                sh 'sleep 10'
+                bat 'docker-compose up -d'
+                bat 'ping -n 10 127.0.0.1 > nul'  // Wait for services to start
             }
         }
 
         stage('Run Unit Tests') {
             steps {
-                dir('backend') {
-                    sh 'npm run test:unit'
-                }
+                bat 'npm run test:unit'
             }
         }
 
         stage('Run Integration Tests') {
             steps {
-                dir('backend') {
-                    sh 'npm run test:integration'
-                }
+                bat 'npm run test:integration'
             }
         }
 
         stage('Stop Services') {
             steps {
-                sh "${DOCKER_COMPOSE} down"
+                bat 'docker-compose down'
             }
         }
     }
 
     post {
         always {
-            // Clean up
-            sh "${DOCKER_COMPOSE} down -v"
-            
-            // Publish test results
-            junit 'backend/junit.xml'
+            bat 'docker-compose down -v'
+            junit 'test-results/*.xml'
+        }
+        success {
+            bat 'echo "Pipeline completed successfully"'
+        }
+        failure {
+            bat 'echo "Pipeline failed"'
         }
     }
 } 
