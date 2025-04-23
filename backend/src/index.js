@@ -22,20 +22,25 @@ app.use('/api/users', userRoutes);
 // Error handling
 app.use(errorHandler);
 
-// Initialize database and start server
-const startServer = async () => {
+// Initialize database
+const initServer = async () => {
   try {
     await testConnection();
     await initDatabase();
-
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
   } catch (error) {
-    console.error('Failed to start server:', error);
+    console.error('Failed to initialize server:', error);
     process.exit(1);
   }
 };
 
-startServer(); 
+// Only start the server if this file is run directly
+if (require.main === module) {
+  initServer().then(() => {
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  });
+}
+
+module.exports = app; 
