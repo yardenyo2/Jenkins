@@ -1,14 +1,21 @@
 const request = require('supertest');
-const { pool } = require('../../src/db');
+const { pool, initDatabase } = require('../../src/db');
 const app = require('../../src/index');
 
 describe('Auth Integration Tests', () => {
   beforeAll(async () => {
+    // Initialize database tables
+    await initDatabase();
     // Clear users table before tests
     await pool.query('DELETE FROM users');
   });
 
   afterAll(async () => {
+    // Close the server
+    await new Promise((resolve) => {
+      app.close(resolve);
+    });
+    // Close database connection
     await pool.end();
   });
 
